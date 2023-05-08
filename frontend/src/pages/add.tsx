@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 
+import { Breadcrumb } from '~/base/Breadcrumb';
+
 const AddProduct = () => {
   const [name, setName] = useState<string>('');
   const [price, setPrice] = useState<string>('');
@@ -21,6 +23,12 @@ const AddProduct = () => {
 
   return (
     <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
+      <Breadcrumb
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Add', path: '/add', isActive: true },
+        ]}
+      />
       <form onSubmit={handleSubmit} className="my-10">
         <div className="flex flex-col">
           <div className="mb-5">

@@ -36,7 +36,7 @@ const EditProduct = () => {
       <Breadcrumb
         breadcrumbs={[
           { name: 'Home', path: '/' },
-          { name, path: `/edit/${id}` },
+          { name, path: `/edit/${id}`, isActive: true },
         ]}
       />
       <form onSubmit={handleSubmit} className="my-10">
