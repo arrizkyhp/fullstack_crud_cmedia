@@ -1,9 +1,27 @@
+import axios from 'axios';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
+import useSWR, { useSWRConfig } from 'swr';
 
 import styles from '../common/styles/Home.module.scss';
 
 export default function Home() {
+  const { mutate } = useSWRConfig();
+  const fetcher = async () => {
+    const response = await axios.get('http://localhost:5000/products');
+    return response.data;
+  };
+
+  const handleDelete = async (productId: number) => {
+    await axios.delete(`http://localhost:5000/products/${productId}`);
+    mutate('products');
+  };
+
+  const { data } = useSWR('products', fetcher);
+
+  if (!data) return <h2>Loading....</h2>;
+
   return (
     <div className={styles.container}>
       <Head>
@@ -12,13 +30,58 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h2 className={styles.title}>
-          🎉 Welcome to{' '}
-          <a href="https://nextjs.org" className="font-bold">
-            Next.js! Starter🎉
-          </a>
-        </h2>
+      <main className="flex flex-col mt-5">
+        <div className="w-full">
+          <Link
+            href="/add"
+            className="bg-green-500 hover:bg-green-700 border border-slate-200 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            Add New{' '}
+          </Link>
+          <div className="relative shadow rounded-lg mt-3">
+            <table className="w-full text-sm text-left text-grey-500">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-100">
+                <tr>
+                  <th className="py-3 px-1 text-center">No</th>
+                  <th className="py-3 px-6">Product Name</th>
+                  <th className="py-3 px-6">Price</th>
+                  <th className="py-3 px-1 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map(
+                  (
+                    product: { id: number; name: string; price: number },
+                    index: number
+                  ) => (
+                    <tr key={product.id} className="bg-white border-b">
+                      <td className="py-3 px-1 text-center">{index + 1}</td>
+                      <td className="py-3 px-6 font-medium text-gray-900">
+                        {product.name}
+                      </td>
+                      <td className="py-3 px-6">{product.price}</td>
+                      <td className="py-3 px-1 text-center">
+                        <Link
+                          href={`/edit/${product.id}`}
+                          className="font-medium bg-blue-400 hover:bg-blue-500 px-3 py-1 rounded text-white mr-1"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(product.id)}
+                          className="font-medium bg-red-400 hover:bg-red-500 px-3 py-1 rounded text-white mr-1"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </main>
 
       <footer className={styles.footer}>
