@@ -1,6 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import axios from 'axios';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 import { Breadcrumb } from '~/base/Breadcrumb';
 
@@ -18,56 +21,62 @@ const AddProduct = () => {
       price: Number(price),
     });
 
+    toast.success('Data Succesfully added');
     router.push('/');
   };
 
   return (
-    <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
-      <Breadcrumb
-        breadcrumbs={[
-          { name: 'Home', path: '/' },
-          { name: 'Add', path: '/add', isActive: true },
-        ]}
-      />
-      <form onSubmit={handleSubmit} className="my-10">
-        <div className="flex flex-col">
+    <>
+      <Head>
+        <title>Add New Product - My App</title>
+      </Head>
+      <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
+        <Breadcrumb
+          breadcrumbs={[
+            { name: 'Home', path: '/' },
+            { name: 'Add', path: '/add', isActive: true },
+          ]}
+        />
+        <form onSubmit={handleSubmit} className="my-10">
+          <div className="flex flex-col">
+            <div className="mb-5">
+              <label htmlFor="productName" className="font-bold text-slate-700">
+                Product Name
+              </label>
+              <input
+                type="text"
+                name="productName"
+                id="productName"
+                className="w-full py-3 mt-1 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                placeholder="Product Name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              />
+            </div>
+          </div>
           <div className="mb-5">
-            <label htmlFor="productName" className="font-bold text-slate-700">
-              Product Name
+            <label htmlFor="price" className="font-bold text-slate-700">
+              Price
             </label>
             <input
               type="text"
-              name="productName"
-              id="productName"
+              name="price"
+              id="price"
               className="w-full py-3 mt-1 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
-              placeholder="Product Name"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
+              placeholder="Price"
+              value={price}
+              onChange={(event) => setPrice(event.target.value)}
             />
           </div>
-        </div>
-        <div className="mb-5">
-          <label htmlFor="price" className="font-bold text-slate-700">
-            Price
-          </label>
-          <input
-            type="text"
-            name="price"
-            id="price"
-            className="w-full py-3 mt-1 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
-            placeholder="Price"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full py-3 font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow"
-        >
-          Save
-        </button>
-      </form>
-    </div>
+          <button
+            type="submit"
+            className="w-full py-3 font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow"
+          >
+            Save
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

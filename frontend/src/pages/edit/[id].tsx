@@ -1,6 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 import { Breadcrumb } from '~/base/Breadcrumb';
 
@@ -19,6 +21,7 @@ const EditProduct = () => {
       price: Number(price),
     });
 
+    toast.success('Data Succesfully Updated');
     router.push('/');
   };
 

@@ -5,6 +5,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import useSWR, { useSWRConfig } from 'swr';
 
 import styles from '../common/styles/Home.module.scss';
@@ -21,6 +22,7 @@ export default function Home() {
   const handleDelete = async () => {
     await axios.delete(`http://localhost:5000/products/${selectedId}`);
     mutate('products');
+    toast.success('Data Succesfully Deleted');
     setIsOpen(false);
   };
 
